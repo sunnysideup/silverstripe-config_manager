@@ -56,7 +56,7 @@ class CheckConfigs extends BuildTask
                 if(in_array($key, $doNotShow)) {
                     continue;
                 }
-                if(strpos($key, '_cache') !== false) {
+                if(strpos($key, 'cache') !== false) {
                     continue;
                 }
                 $staticList[$key] = $key;
