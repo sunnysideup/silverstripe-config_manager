@@ -77,7 +77,7 @@ class CheckConfigs extends BuildTask
         ksort($resultArray);
         foreach($resultArray as $fileName => $values) {
             if(is_array($values['Statics']) && count($values['Statics'])) {
-                echo '<h3>'.$values['Name'].' ('.$values['FileLocation'].')</h3><ul>';
+                echo '<h3>'.$values['Name'].' ('.implode('/', $values['FileLocation']).')</h3><ul>';
                 foreach($values['Statics'] as $name) {
                     echo '<li>'.$name.'</li>';
                 }
