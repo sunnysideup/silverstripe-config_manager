@@ -23,7 +23,7 @@ class CheckConfigs extends BuildTask
         'indexes',
         'summary_fields',
         'singular_name',
-        'plural_name'
+        'plural_name',
         'allowed_actions',
         'api_access',
         'validation_enabled',
@@ -49,22 +49,29 @@ class CheckConfigs extends BuildTask
             $fileName = str_replace(Director::baseFolder(), '', $fileName);
             $statics = $reflector->getStaticProperties();
             $staticList = array();
+            $staticListDefaultOnes = array();
+            $staticListCachingStatics = array();
             foreach($statics as $key => $values) {
-                if(substr($key, 0, 1) == "_") {
-                    continue;
-                }
                 if(in_array($key, $doNotShow)) {
+                    $staticListDefaultOnes[$key] = $key;
                     continue;
-                }
-                if(strpos($key, 'cache') !== false) {
+                } elseif(substr($key, 0, 1) == "_") {
+                    $staticListCachingStatics[$key] = $key;
                     continue;
+                } elseif(strpos($key, 'cache') !== false) {
+                    $staticListCachingStatics[$key] = $key;
+                    continue;
+                } else {
+                    $staticList[$key] = $key;
                 }
-                $staticList[$key] = $key;
             }
             $resultArray[str_replace('/', '-', $fileName)] = array(
                 'Name' => $class,
-                'FileLocation' => $fileName,
-                'Statics' => $staticList
+                'FileLocation' => explode('/', $fileName),
+                'ParentClasses' => ClassInfo::ancestry($class),
+                'Statics' => $staticList,
+                'DefaultOnes' => $staticListDefaultOnes,
+                'CachedOnes' => $staticListCachingStatics
             );
         }
         ksort($resultArray);
