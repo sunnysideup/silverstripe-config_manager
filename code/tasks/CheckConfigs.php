@@ -43,7 +43,7 @@ class CheckConfigs extends BuildTask
         $classes = ClassInfo::subclassesFor('Object');
         $doNotShow = $this->Config()->get('do_not_show');
         $resultArray = array();
-        foreach($classes as $classKey => $class) {
+        foreach ($classes as $classKey => $class) {
             $reflector = new ReflectionClass($class);
             $fileName = $reflector->getFileName();
             $fileName = str_replace(Director::baseFolder(), '', $fileName);
@@ -51,14 +51,14 @@ class CheckConfigs extends BuildTask
             $staticList = array();
             $staticListDefaultOnes = array();
             $staticListCachingStatics = array();
-            foreach($statics as $key => $values) {
-                if(in_array($key, $doNotShow)) {
+            foreach ($statics as $key => $values) {
+                if (in_array($key, $doNotShow)) {
                     $staticListDefaultOnes[$key] = $key;
                     continue;
-                } elseif(substr($key, 0, 1) == "_") {
+                } elseif (substr($key, 0, 1) == "_") {
                     $staticListCachingStatics[$key] = $key;
                     continue;
-                } elseif(strpos($key, 'cache') !== false) {
+                } elseif (strpos($key, 'cache') !== false) {
                     $staticListCachingStatics[$key] = $key;
                     continue;
                 } else {
@@ -75,10 +75,10 @@ class CheckConfigs extends BuildTask
             );
         }
         ksort($resultArray);
-        foreach($resultArray as $fileName => $values) {
-            if(is_array($values['Statics']) && count($values['Statics'])) {
+        foreach ($resultArray as $fileName => $values) {
+            if (is_array($values['Statics']) && count($values['Statics'])) {
                 echo '<h3>'.$values['Name'].' ('.implode('/', $values['FileLocation']).')</h3><ul>';
-                foreach($values['Statics'] as $name) {
+                foreach ($values['Statics'] as $name) {
                     echo '<li>'.$name.'</li>';
                 }
                 echo '

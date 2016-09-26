@@ -3,8 +3,9 @@
     "type": "silverstripe-module",
     "description": "Silverstripe developers module that helps you get a better grip on the config layer",
     "keywords": [
-        "Silverstripe",
+        "Silverstripe-CMS",
         "CMS",
+        "Silverstripe",
         "Silverstripe CMS",
         "statics",
         "yml",
@@ -12,19 +13,18 @@
         "config"
     ],
     "license": "Sunny Side Up (BSD-3-Clause and CUSTOM)",
-    "authors":[
+    "authors": [
         {
             "name": "Nicolaas Francken",
-            "homepage": "https://github.com/sunnysideup",
-            "email" : "modules@sunnysideup.co.nz",
-            "role" : "lead developer"
+            "email": "modules@sunnysideup.co.nz",
+            "role": "lead developer"
         }
     ],
-    "require":{
-        "silverstripe/framework": "^3.1"
+    "require": {
+        "silverstripe/framework": "~3.1",
+        "silverstripe/cms": "~3.1"
     },
     "extra": {
         "installer-name": "config_manager"
     }
-
 }
