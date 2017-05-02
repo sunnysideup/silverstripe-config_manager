@@ -15,7 +15,7 @@
 
  * [Developer Docs](docs/en/INDEX.md)
  * [User Guide](docs/en/userguide.md)
- * [API Docs](http://docs.ssmods.com/sunnysideup/config_manager)
+ * [API Docs](http://docs.ssmods.com/sunnysideup/config_manager/classes.xhtml)
 
 ## Requirements
 
