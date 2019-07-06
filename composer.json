@@ -23,7 +23,5 @@
     "require": {
         "silverstripe/recipe-cms": "^4.4"
     },
-    "extra": {
-        "installer-name": "config_manager"
-    }
+    "extra": []
 }
