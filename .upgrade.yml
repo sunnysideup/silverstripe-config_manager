@@ -1,0 +1,2 @@
+mappings:
+  CheckConfigs: Sunnysideup\ConfigManager\Tasks\CheckConfigs

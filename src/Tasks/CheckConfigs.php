@@ -1,5 +1,14 @@
 <?php
 
+namespace Sunnysideup\ConfigManager\Tasks;
+
+use BuildTask;
+use ClassInfo;
+use ReflectionClass;
+use Director;
+use DB;
+
+
 class CheckConfigs extends BuildTask
 {
     protected $title = 'Check configs';
