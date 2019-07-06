@@ -1,6 +1,6 @@
 {
     "name": "sunnysideup/config_manager",
-    "type": "silverstripe-module",
+    "type": "silverstripe-vendormodule",
     "description": "Silverstripe developers module that helps you get a better grip on the config layer",
     "keywords": [
         "Silverstripe-CMS",
@@ -21,10 +21,12 @@
         }
     ],
     "require": {
-        "silverstripe/framework": "~3.6",
-        "silverstripe/cms": "~3.6"
+        "silverstripe/recipe-cms": "^4.4"
     },
-    "extra": {
-        "installer-name": "config_manager"
+    "extra": [],
+    "autoload": {
+        "psr-4": {
+            "Sunnysideup\\ConfigManager\\": "src/"
+        }
     }
 }

@@ -1,5 +1,19 @@
 <?php
 
+namespace Sunnysideup\ConfigManager\Tasks;
+
+
+
+use ReflectionClass;
+
+
+use SilverStripe\Core\ClassInfo;
+use SilverStripe\Control\Director;
+use SilverStripe\ORM\DB;
+use SilverStripe\Dev\BuildTask;
+
+
+
 class CheckConfigs extends BuildTask
 {
     protected $title = 'Check configs';
