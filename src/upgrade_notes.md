@@ -34,3 +34,13 @@ Array
     [17] => inspect [-d|--root-dir ROOT-DIR] [-w|--write] [--skip-visibility] [--] <path>
     [18] => 
 )
+
+# running php upgrade inspect see: https://github.com/silverstripe/silverstripe-upgrader
+cd /var/www/upgrades/upgradeto4
+php /var/www/upgrader/vendor/silverstripe/upgrader/bin/upgrade-code inspect /var/www/upgrades/upgradeto4/config_manager/src  --root-dir=/var/www/upgrades/upgradeto4 --write -vvv
+Writing changes for 0 files
+Running post-upgrade on "/var/www/upgrades/upgradeto4/config_manager/src"
+[2019-07-07 08:21:48] Applying ApiChangeWarningsRule to CheckConfigs.php...
+[2019-07-07 08:21:48] Applying UpdateVisibilityRule to CheckConfigs.php...
+Writing changes for 0 files
+✔✔✔
