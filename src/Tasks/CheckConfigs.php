@@ -2,11 +2,16 @@
 
 namespace Sunnysideup\ConfigManager\Tasks;
 
-use BuildTask;
-use ClassInfo;
+
+
 use ReflectionClass;
-use Director;
-use DB;
+
+
+use SilverStripe\Core\ClassInfo;
+use SilverStripe\Control\Director;
+use SilverStripe\ORM\DB;
+use SilverStripe\Dev\BuildTask;
+
 
 
 class CheckConfigs extends BuildTask
