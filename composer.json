@@ -1,6 +1,6 @@
 {
     "name": "sunnysideup/config_manager",
-    "type": "silverstripe-module",
+    "type": "silverstripe-vendormodule",
     "description": "Silverstripe developers module that helps you get a better grip on the config layer",
     "keywords": [
         "Silverstripe-CMS",
