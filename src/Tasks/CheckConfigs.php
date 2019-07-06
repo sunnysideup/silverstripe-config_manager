@@ -18,18 +18,16 @@ class CheckConfigs extends BuildTask
 
     public function run($request)
     {
-        $list = ConfigList();
+        $list = new ConfigList();
         $list = $list->getListOfConfigs();
         ksort($list);
         foreach ($list as $values) {
-            if (is_array($values['Statics']) && count($values['Statics'])) {
-                echo '<h3>' . $values['Name'] . ' (' . implode('/', $values['FileLocation']) . ')</h3><ul>';
-                foreach ($values['Statics'] as $name) {
-                    echo '<li>' . $name . '</li>';
-                }
-                echo '
-                </ul>';
+            echo '<h3>' . $values['ShortClassName'] . ' (' . $values['FileLocation'] . ')</h3><ul>';
+            foreach ($values['Statics'] as $name) {
+                echo '<li>' . $name . '</li>';
             }
+            echo '
+            </ul>';
         }
         DB::alteration_message('<h1>==================================</h1>');
     }
