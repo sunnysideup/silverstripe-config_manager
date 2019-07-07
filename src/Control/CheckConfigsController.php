@@ -4,10 +4,14 @@ namespace Sunnysideup\ConfigManager\Control;
 
 use SilverStripe\Dev\BuildTask;
 use SilverStripe\ORM\DB;
+use SilverStripe\ORM\ArrayList;
 use SilverStripe\Control\Controller;
+use SilverStripe\View\ArrayData;
 use Sunnysideup\ConfigManager\Api\ConfigList;
 
-class CheckConfigsController extends ContentController
+use Sunnysideup\TableFilterSort\Api\TableFilterSortAPI;
+
+class CheckConfigsController extends Controller
 {
     protected $title = 'Check configs';
 
@@ -23,19 +27,38 @@ class CheckConfigsController extends ContentController
         'index' => 'ADMIN'
     ];
 
+    public function Title()
+    {
+        return $this->title;
+    }
+
     public function index($request)
+    {
+        TableFilterSortAPI::include_requirements();
+
+        return $this->renderWith('Includes/CheckConfigsTable');
+    }
+
+    public function Data()
     {
         $list = new ConfigList();
         $list = $list->getListOfConfigs();
         ksort($list);
+        $finalArray = ArrayList::create();
         foreach ($list as $values) {
-            echo '<h3>' . $values['ShortClassName'] . ' (' . $values['FileLocation'] . ')</h3><ul>';
             foreach ($values['Statics'] as $name) {
-                echo '<li>' . $name . '</li>';
+                $innerArray = [
+                    'Property' => $name,
+                ];
+                $tmpValues = $values;
+                foreach($tmpValues as $key => $value) {
+                    $innerArray[$key] = $value;
+                }
             }
-            echo '
-            </ul>';
+            $finalArray[] = $innerArray;
         }
-        DB::alteration_message('<h1>==================================</h1>');
+
+        return $finalArray;
     }
+
 }
