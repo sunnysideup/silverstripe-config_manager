@@ -1,0 +1,6 @@
+---
+Name: sunnysideup-config-checks
+---
+SilverStripe\Control\Director:
+  rules:
+    checkconfigs//$Action/$ID: Sunnysideup\ConfigManager\Control\CheckConfigsController

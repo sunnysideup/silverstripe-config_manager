@@ -22,6 +22,7 @@
     ],
     "require": {
         "silverstripe/recipe-cms": "^4.4"
+        "sunnysideup/table_filter_sort": "*"
     },
     "extra": [],
     "autoload": {

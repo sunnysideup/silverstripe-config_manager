@@ -1,22 +1,29 @@
 <?php
 
-namespace Sunnysideup\ConfigManager\Tasks;
+namespace Sunnysideup\ConfigManager\Control;
 
 use SilverStripe\Dev\BuildTask;
 use SilverStripe\ORM\DB;
+use SilverStripe\Control\Controller;
 use Sunnysideup\ConfigManager\Api\ConfigList;
 
-class CheckConfigs extends BuildTask
+class CheckConfigsController extends ContentController
 {
     protected $title = 'Check configs';
 
     protected $description = 'Runs through all classes and looks for private statics';
 
-    protected $segment = 'checkconfig';
+    protected $url_segment = 'checkconfigs';
 
-    protected $enabled = true;
+    /**
+     * Defines methods that can be called directly
+     * @var array
+     */
+    private static $allowed_actions = [
+        'index' => 'ADMIN'
+    ];
 
-    public function run($request)
+    public function index($request)
     {
         $list = new ConfigList();
         $list = $list->getListOfConfigs();
