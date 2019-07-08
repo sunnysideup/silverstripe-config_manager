@@ -113,7 +113,7 @@ class ConfigList
                 $package = $classNameArray[1];
                 array_shift($classNameArray);
                 array_shift($classNameArray);
-                $shorterClassname = implode(' \\ ', $classNameArray);
+                $shorterClassname = implode(' / ', $classNameArray);
             }
             $lists = [
                 'runtime' => $deltaList,

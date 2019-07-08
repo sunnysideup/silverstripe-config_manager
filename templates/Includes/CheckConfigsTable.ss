@@ -85,6 +85,8 @@
     <% include TableFilterSortFooter %>
 
     </main>
-
+    <p>
+        This config manager is provided by Sunny Side Up. Please visit <a href="http://ssmods.com/#~(cfi~(Team~(~(vtm~'sunnysideup~ivl~'sunnysideup)))~csr~(sdi~'desc~sct~'Created_U))">ssmods.com</a> for more modules</p>.
+    </p>
 </body>
 </html>

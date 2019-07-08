@@ -1,3 +1,3 @@
 Visit:
 
-/admin/checkconfigs/
+/admin-dev/checkconfigs/
