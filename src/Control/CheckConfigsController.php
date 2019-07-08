@@ -55,17 +55,52 @@ class CheckConfigsController extends Controller
                 'maximumNumberOfFilterOptions' => 20,
                 'filtersParentPageID' => '',
                 'favouritesParentPageID' => '',
-                'visibleRowCount' => 100,
+                'visibleRowCount' => 20,
                 'startWithOpenFilter' => true,
                 'dataDictionary' => [
+                    'Type' => [
+                        'Label' => 'Type',
+                        'CanFilter' => true,
+                    ],
                     'Vendor' => [
-                        'Label' => 'Vendor'
+                        'Label' => 'Vendor',
+                        'CanFilter' => true,
                     ],
                     'Package' => [
-                        'Label' => 'Package'
+                        'Label' => 'Package',
+                        'CanFilter' => true,
                     ],
                     'ShorterClassName' => [
-                        'Label' => 'Class'
+                        'Label' => 'Class',
+                        'CanFilter' => true,
+                    ],
+                    'Property' => [
+                        'Label' => 'Property',
+                        'CanFilter' => true,
+                    ],
+                    'IsDefault' => [
+                        'Label' => 'Is Default',
+                        'CanFilter' => true,
+                    ],
+                    'HasDefault' => [
+                        'Label' => 'Has Default',
+                        'CanFilter' => false,
+                    ],
+                    'HasDefault' => [
+                        'Label' => 'Has Default',
+                        'CanFilter' => false,
+                    ],
+                    'HasValue' => [
+                        'Label' => 'Has Value',
+                        'CanFilter' => true,
+                    ],
+                    'Value' => [
+                        'Label' => 'Value',
+                        'CanFilter' => false,
+                    ],
+                    'Default' => [
+                        'Label' => 'Default Value',
+                        'CanFilter' => false,
                     ],
                 ],
             ]

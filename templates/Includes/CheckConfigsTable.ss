@@ -56,20 +56,26 @@
                 <td class="col-8">
 
                     {{? it.HasValue == 'yes' }}
-                    <a href="#" class="more">show</a>
+                    <a href="#" class="more">show details</a>
                     <div class="hidden">
                         <p><strong>Is Default:</strong> {{= it.IsDefault }}<p>
                         <h5>Value</h5>
                         {{= it.Value}}
                         {{? it.IsDefault !== 'no' }}
-                        {{? it.HasDefault !== 'yes' }}
+                        {{? it.HasDefault === 'yes' }}
                         <h5>Default</h5>
-                        {{= it.Default}}
+                        {{= it.Default }}
                         {{?}}
                         {{?}}
                     </div>
                     {{??}}
-                    not set
+                    not value set
+                    {{?}}
+                    {{? it.IsDefault !== 'no' }}
+                    {{? it.HasDefault === 'yes' }}
+                    <h5>Default</h5>
+                    {{= it.Default }}
+                    {{?}}
                     {{?}}
                 </td>
             </tr>

@@ -129,7 +129,7 @@ class ConfigList
                     foreach($list as $property) {
                         $key = str_replace('/', '-', $fileName.'-'.$property);
                         if(!isset($resultArray[$key])) {
-                            $value = $config->get($class, $property);
+                            $value = $config->get($class, $property, Config::UNINHERITED);
                             $hasValue = $value ? true : false;
                             $originalValue = '';
                             if(is_object($value)) {
