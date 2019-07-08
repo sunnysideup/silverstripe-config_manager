@@ -5,6 +5,7 @@ namespace Sunnysideup\ConfigManager\Api;
 use ReflectionClass;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\ClassInfo;
+use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Extensible;
 use SilverStripe\Core\Injector\Injectable;
@@ -70,9 +71,13 @@ class ConfigList
      */
     public function getListOfConfigs()
     {
+
         $resultArray = [];
 
         $doNotShow = $this->Config()->get('do_not_show');
+
+        $config = Config::inst();
+        $alsoSet = $config->getAll();
 
         $classes = $this->configurableClasses();
         foreach ($classes as $class) {
@@ -80,13 +85,20 @@ class ConfigList
             $fileName = $reflector->getFileName();
             $fileName = str_replace(Director::baseFolder(), '', $fileName);
             $statics = $reflector->getStaticProperties();
+
+            //lists
+            $deltaList = $this->getDeltas($config, $class);
             $staticList = [];
+            $dynamicList = array_keys($alsoSet[strtolower($class)]);
             $staticListDefaultOnes = [];
             $staticListCachingStatics = [];
             foreach (array_keys($statics) as $key) {
                 if (in_array($key, $doNotShow, true)) {
                     $staticListDefaultOnes[$key] = $key;
-                } elseif (substr($key, 0, 1) === '_' || strpos($key, 'cache') !== false) {
+                } elseif (
+                    substr($key, 0, 1) === '_' ||
+                    strpos($key, 'cache') !== false
+                ) {
                     $staticListCachingStatics[$key] = $key;
                 } else {
                     $staticList[$key] = $key;
@@ -94,39 +106,67 @@ class ConfigList
             }
             $vendor = 'n/a';
             $package = 'n/a';
+            $shorterClassname = $class;
             $classNameArray = explode('\\', $class);
             if (count($classNameArray) > 1) {
                 $vendor = $classNameArray[0];
                 $package = $classNameArray[1];
+                array_shift($classNameArray);
+                array_shift($classNameArray);
+                $shorterClassname = implode(' \\ ', $classNameArray);
             }
             $lists = [
-                'static' => $staticList,
-                'default' => $staticListDefaultOnes,
-                'caching' => $staticListCachingStatics
+                'runtime' => $deltaList,
+                'property' => $staticList,
+                'caching' => $staticListCachingStatics,
+                'system' => $staticListDefaultOnes,
+                'dynamic' => $dynamicList,
             ];
             $shortClassName = ClassInfo::shortName($class);
             $ancestry = ClassInfo::ancestry($class);
             foreach($lists as $type => $list) {
-                $isConfigOne = $type === 'static';
-                $isDefaultOne = $type === 'default';
-                $isCachingOne = $type === 'caching';
                 if (count($list)) {
-                    foreach($list as $static) {
-                        $key = str_replace('/', '-', $fileName.'-'.$static);
-                        $resultArray[$key] = [
-                            'Vendor' => $vendor,
-                            'Package' => $package,
-                            'ClassName' => $class,
-                            'ShortClassName' => $shortClassName,
-                            'FileLocation' => $fileName,
-                            'ParentClasses' => $ancestry,
-                            'Property' => $static,
-                            'IsConfigOne' => $isConfigOne,
-                            'IsDefaultOne' => $isDefaultOne,
-                            'IsCachingOne' => $isCachingOne,
-                            'IsSet' => true,
-                            'IsInherited' => false,
-                        ];
+                    foreach($list as $property) {
+                        $key = str_replace('/', '-', $fileName.'-'.$property);
+                        if(!isset($resultArray[$key])) {
+                            $value = $config->get($class, $property);
+                            $hasValue = $value ? true : false;
+                            $originalValue = '';
+                            if(is_object($value)) {
+                                $value = 'object';
+                            } else {
+                                if($reflector->hasProperty($property)) {
+                                    $propertyObject = $reflector->getProperty($property);
+                                    $propertyObject->setAccessible(true);
+                                    $originalValue = $propertyObject->getValue($reflector);
+                                }
+                            }
+                            $isDefault = true;
+                            $default = '';
+                            if($originalValue && $originalValue !== $value) {
+                                $isDefault = false;
+                                if($value && $originalValue) {
+                                    $default = $originalValue;
+                                }
+                            }
+                            $hasDefault = $originalValue ? true : false;
+                            $resultArray[$key] = [
+                                'Vendor' => $vendor,
+                                'Package' => $package,
+                                'ClassName' => $class,
+                                'ShorterClassName' => $shorterClassname,
+                                'ShortClassName' => $shortClassName,
+                                'FileLocation' => $fileName,
+                                'ParentClasses' => $ancestry,
+                                'Property' => $property,
+                                'Type' => $type,
+                                'IsDefault' => $isDefault,
+                                'HasDefault' => $hasDefault,
+                                'HasValue' => $hasValue,
+                                'Default' => $default,
+                                'Value' => $value,
+                            ];
+                        }
                     }
                 }
             }
@@ -166,5 +206,23 @@ class ConfigList
                 }
             }
         );
+    }
+
+    public function getDeltas($config, $className)
+    {
+        $deltaList = [];
+        $deltas = $config->getDeltas($className);
+        if(count($deltas)) {
+            foreach($deltas as $deltaInners) {
+                if(isset($deltaInners['config'])) {
+                    $deltaList = array_merge(
+                        $deltaList,
+                        array_keys($deltaInners['config'])
+                    );
+                }
+            }
+        }
+
+        return $deltaList;
     }
 }

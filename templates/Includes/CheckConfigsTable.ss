@@ -16,65 +16,61 @@
     <table class="tfs-table">
         <thead>
             <tr>
-                <th class="col-1">
-                    <a href="#" class="sortable" data-sort-field="ClassName" data-sort-direction="asc" data-sort-type="string" data-sort-only="true">Class Name</a>
-                </th>
                 <th class="col-2">
-                    <a href="#" class="sortable" data-sort-field="Vendor" data-sort-direction="asc" data-sort-type="string" data-sort-only="true">Vendor</a>
+                    <a href="#" class="sortable" data-sort-field="Vendor" data-sort-direction="asc" data-sort-type="string">Vendor</a>
                 </th>
                 <th class="col-3">
-                    <a href="#" class="sortable" data-sort-field="Package" data-sort-direction="asc" data-sort-type="string" data-sort-only="true">Package</a>
+                    <a href="#" class="sortable" data-sort-field="Package" data-sort-direction="asc" data-sort-type="string">Package</a>
                 </th>
                 <th class="col-4">
-                    <a href="#" class="sortable" data-sort-field="ShortClassName" data-sort-direction="asc" data-sort-type="string" data-sort-only="true">ShortClassName</a>
+                    <a href="#" class="sortable" data-sort-field="ShorterClassName" data-sort-direction="asc" data-sort-type="string">Shorter ClassName</a>
                 </th>
                 <th class="col-5">
-                    <a href="#" class="sortable" data-sort-field="Property" data-sort-direction="asc" data-sort-type="string" data-sort-only="true">Property</a>
-                </th>
-                <th class="col-6">
-                    <a href="#" class="sortable" data-sort-field="IsSet" data-sort-direction="asc" data-sort-type="number" data-sort-only="true">Set</a>
+                    <a href="#" class="sortable" data-sort-field="Property" data-sort-direction="asc" data-sort-type="string">Property</a>
                 </th>
                 <th class="col-7">
-                    <a href="#" class="sortable" data-sort-field="IsInherited" data-sort-direction="asc" data-sort-type="number" data-sort-only="true">Inherited</a>
+                    <a href="#" class="sortable" data-sort-field="Type" data-sort-direction="asc" data-sort-type="number">Type</a>
                 </th>
-                <th class="col-8">
+                <th class="col-8" data-sort-field="HasValue" data-sort-direction="desc" data-sort-type="string">
                     Value
-                </th>
-                <th class="col-9">
-                    more ...
                 </th>
             </tr>
         </thead>
         <tbody>
-            <tr class="tfstr" id="{{= it.ID }}">
-                <td class="col-1">
-                    <span data-filter="ClassName" class="more">{{= it.ClassName}}</span>
-                </td>
+            <tr class="tfstr">
                 <td class="col-2">
-                    <span data-filter="Vendor" class="more">{{= it.Vendor}}</span>
+                    <span data-filter="Vendor" class="dl">{{= it.Vendor}}</span>
                 </td>
                 <td class="col-3">
-                    <span data-filter="Package" class="more">{{= it.Package}}</span>
+                    <span data-filter="Package" class="dl">{{= it.Package}}</span>
                 </td>
                 <td class="col-4">
-                    <span data-filter="ShortClassName" class="more">{{= it.ShortClassName}}</span>
+                    <span data-filter="ShorterClassName" class="dl">{{= it.ShorterClassName}}</span>
                 </td>
                 <td class="col-5">
-                    <span data-filter="Variable" class="more">{{= it.Property}}</span>
+                    <span data-filter="Property" class="dl">{{= it.Property}}</span>
                 </td>
                 <td class="col-6">
-                    <span data-filter="IsSet" class="more">{{= it.IsSet}}</span>
-                </td>
-                <td class="col-7">
-                    <span data-filter="IsInherited" class="more">{{= it.IsInherited}}</span>
+                    <span data-filter="Type" class="dl">{{= it.Type}}</span>
                 </td>
                 <td class="col-8">
+
+                    {{? it.HasValue == 'yes' }}
+                    <a href="#" class="more">show</a>
                     <div class="hidden">
-                    {{= it.Value}}
+                        <p><strong>Is Default:</strong> {{= it.IsDefault }}<p>
+                        <h5>Value</h5>
+                        {{= it.Value}}
+                        {{? it.IsDefault !== 'no' }}
+                        {{? it.HasDefault !== 'yes' }}
+                        <h5>Default</h5>
+                        {{= it.Default}}
+                        {{?}}
+                        {{?}}
                     </div>
-                </td>
-                <td class="col-9">
-                    <a href="#" class="more">more</a>
+                    {{??}}
+                    not set
+                    {{?}}
                 </td>
             </tr>
         </tbody>

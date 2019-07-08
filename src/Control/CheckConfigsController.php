@@ -58,13 +58,17 @@ class CheckConfigsController extends Controller
                 'visibleRowCount' => 100,
                 'startWithOpenFilter' => true,
                 'dataDictionary' => [
-                    // 'Supports' => [
-                    //     'Label' => 'Framework Support'
-                    // ]
-                ]
-
+                    'Vendor' => [
+                        'Label' => 'Vendor'
+                    ],
+                    'Package' => [
+                        'Label' => 'Package'
+                    ],
+                    'ShorterClassName' => [
+                        'Label' => 'Class'
+                    ],
+                ],
             ]
-
         );
         return $this->renderWith('Includes/CheckConfigsTable');
     }
@@ -77,19 +81,19 @@ class CheckConfigsController extends Controller
         $finalArray = [];
         $count = 0;
         foreach ($list as $values) {
-            if($values['IsConfigOne']) {
-                $count++;
-                $id = 'row'.$count;
-                $finalArray[$id] = [];
-                $finalArray[$id]['ClassName'] = $values['ClassName'];
-                $finalArray[$id]['Vendor'] = $values['Vendor'];
-                $finalArray[$id]['Package'] = $values['Package'];
-                $finalArray[$id]['ShortClassName'] = $values['ShortClassName'];
-                $finalArray[$id]['Property'] = $values['Property'];
-                $finalArray[$id]['IsSet'] = $values['IsSet'];
-                $finalArray[$id]['IsInherited'] = $values['IsInherited'];
-                $finalArray[$id]['Value'] = 'tba';
-            }
+            $count++;
+            $id = 'row'.$count;
+            $finalArray[$id] = [];
+            $finalArray[$id]['Vendor'] = $values['Vendor'];
+            $finalArray[$id]['Package'] = $values['Package'];
+            $finalArray[$id]['ShorterClassName'] = $values['ShorterClassName'];
+            $finalArray[$id]['Property'] = $values['Property'];
+            $finalArray[$id]['Type'] = $values['Type'];
+            $finalArray[$id]['IsDefault'] = $values['IsDefault'] ? 'yes' : 'no';
+            $finalArray[$id]['HasDefault'] = $values['HasDefault'] ? 'yes' : 'no';
+            $finalArray[$id]['HasValue'] = $values['HasValue'] ? 'yes' : 'no';
+            $finalArray[$id]['Value'] = '<pre>'.print_r($values['Value'], 1).'</pre>';
+            $finalArray[$id]['Default'] = '<pre>'.print_r($values['Default'], 1).'</pre>';
         }
 
         return $finalArray;
