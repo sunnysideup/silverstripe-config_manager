@@ -2,12 +2,7 @@
 
 namespace Sunnysideup\ConfigManager\Control;
 
-use SilverStripe\Dev\BuildTask;
-use SilverStripe\ORM\DB;
-use SilverStripe\ORM\ArrayList;
 use SilverStripe\Control\Controller;
-use SilverStripe\View\ArrayData;
-use SilverStripe\View\Requirements;
 use SilverStripe\Core\Config\Config;
 use Sunnysideup\ConfigManager\Api\ConfigList;
 
@@ -26,7 +21,7 @@ class CheckConfigsController extends Controller
      * @var array
      */
     private static $allowed_actions = [
-        'index' => 'ADMIN'
+        'index' => 'ADMIN',
     ];
 
     public function Title()
@@ -36,7 +31,7 @@ class CheckConfigsController extends Controller
 
     public function index($request)
     {
-        if(class_exists(\Sunnysideup\WebpackRequirementsBackend\View\RequirementsBackendForWebpack::class, true)) {
+        if (class_exists(\Sunnysideup\WebpackRequirementsBackend\View\RequirementsBackendForWebpack::class, true)) {
             Config::modify()->set(
                 \Sunnysideup\WebpackRequirementsBackend\View\RequirementsBackendForWebpack::class,
                 'enabled',
@@ -117,7 +112,7 @@ class CheckConfigsController extends Controller
         $count = 0;
         foreach ($list as $values) {
             $count++;
-            $id = 'row'.$count;
+            $id = 'row' . $count;
             $finalArray[$id] = [];
             $finalArray[$id]['Vendor'] = $values['Vendor'];
             $finalArray[$id]['Package'] = $values['Package'];
@@ -127,11 +122,10 @@ class CheckConfigsController extends Controller
             $finalArray[$id]['IsDefault'] = $values['IsDefault'] ? 'yes' : 'no';
             $finalArray[$id]['HasDefault'] = $values['HasDefault'] ? 'yes' : 'no';
             $finalArray[$id]['HasValue'] = $values['HasValue'] ? 'yes' : 'no';
-            $finalArray[$id]['Value'] = '<pre>'.print_r($values['Value'], 1).'</pre>';
-            $finalArray[$id]['Default'] = '<pre>'.print_r($values['Default'], 1).'</pre>';
+            $finalArray[$id]['Value'] = '<pre>' . print_r($values['Value'], 1) . '</pre>';
+            $finalArray[$id]['Default'] = '<pre>' . print_r($values['Default'], 1) . '</pre>';
         }
 
         return $finalArray;
     }
-
 }

@@ -71,7 +71,6 @@ class ConfigList
      */
     public function getListOfConfigs()
     {
-
         $resultArray = [];
 
         $doNotShow = $this->Config()->get('do_not_show');
@@ -95,8 +94,7 @@ class ConfigList
             foreach (array_keys($statics) as $key) {
                 if (in_array($key, $doNotShow, true)) {
                     $staticListDefaultOnes[$key] = $key;
-                } elseif (
-                    substr($key, 0, 1) === '_' ||
+                } elseif (substr($key, 0, 1) === '_' ||
                     strpos($key, 'cache') !== false
                 ) {
                     $staticListCachingStatics[$key] = $key;
@@ -124,18 +122,18 @@ class ConfigList
             ];
             $shortClassName = ClassInfo::shortName($class);
             $ancestry = ClassInfo::ancestry($class);
-            foreach($lists as $type => $list) {
+            foreach ($lists as $type => $list) {
                 if (count($list)) {
-                    foreach($list as $property) {
-                        $key = str_replace('/', '-', $fileName.'-'.$property);
-                        if(!isset($resultArray[$key])) {
+                    foreach ($list as $property) {
+                        $key = str_replace('/', '-', $fileName . '-' . $property);
+                        if (! isset($resultArray[$key])) {
                             $value = $config->get($class, $property, Config::UNINHERITED);
                             $hasValue = $value ? true : false;
                             $originalValue = '';
-                            if(is_object($value)) {
+                            if (is_object($value)) {
                                 $value = 'object';
                             } else {
-                                if($reflector->hasProperty($property)) {
+                                if ($reflector->hasProperty($property)) {
                                     $propertyObject = $reflector->getProperty($property);
                                     $propertyObject->setAccessible(true);
                                     $originalValue = $propertyObject->getValue($reflector);
@@ -143,9 +141,9 @@ class ConfigList
                             }
                             $isDefault = true;
                             $default = '';
-                            if($originalValue && $originalValue !== $value) {
+                            if ($originalValue && $originalValue !== $value) {
                                 $isDefault = false;
-                                if($value && $originalValue) {
+                                if ($value && $originalValue) {
                                     $default = $originalValue;
                                 }
                             }
@@ -173,6 +171,24 @@ class ConfigList
         }
 
         return $resultArray;
+    }
+
+    public function getDeltas($config, $className)
+    {
+        $deltaList = [];
+        $deltas = $config->getDeltas($className);
+        if (count($deltas)) {
+            foreach ($deltas as $deltaInners) {
+                if (isset($deltaInners['config'])) {
+                    $deltaList = array_merge(
+                        $deltaList,
+                        array_keys($deltaInners['config'])
+                    );
+                }
+            }
+        }
+
+        return $deltaList;
     }
 
     protected function configurableClasses()
@@ -206,23 +222,5 @@ class ConfigList
                 }
             }
         );
-    }
-
-    public function getDeltas($config, $className)
-    {
-        $deltaList = [];
-        $deltas = $config->getDeltas($className);
-        if(count($deltas)) {
-            foreach($deltas as $deltaInners) {
-                if(isset($deltaInners['config'])) {
-                    $deltaList = array_merge(
-                        $deltaList,
-                        array_keys($deltaInners['config'])
-                    );
-                }
-            }
-        }
-
-        return $deltaList;
     }
 }
