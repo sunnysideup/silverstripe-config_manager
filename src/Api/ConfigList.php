@@ -86,9 +86,7 @@ class ConfigList
             foreach (array_keys($statics) as $key) {
                 if (in_array($key, $doNotShow, true)) {
                     $staticListDefaultOnes[$key] = $key;
-                } elseif (substr($key, 0, 1) === '_') {
-                    $staticListCachingStatics[$key] = $key;
-                } elseif (strpos($key, 'cache') !== false) {
+                } elseif (substr($key, 0, 1) === '_' || strpos($key, 'cache') !== false) {
                     $staticListCachingStatics[$key] = $key;
                 } else {
                     $staticList[$key] = $key;
@@ -101,18 +99,36 @@ class ConfigList
                 $vendor = $classNameArray[0];
                 $package = $classNameArray[1];
             }
-            if (count($staticList)) {
-                $resultArray[str_replace('/', '-', $fileName)] = [
-                    'Vendor' => $vendor,
-                    'Package' => $package,
-                    'ClassName' => $class,
-                    'ShortClassName' => ClassInfo::shortName($class),
-                    'FileLocation' => $fileName,
-                    'ParentClasses' => ClassInfo::ancestry($class),
-                    'Statics' => $staticList,
-                    'DefaultOnes' => $staticListDefaultOnes,
-                    'CachedOnes' => $staticListCachingStatics,
-                ];
+            $lists = [
+                'static' => $staticList,
+                'default' => $staticListDefaultOnes,
+                'caching' => $staticListCachingStatics
+            ];
+            $shortClassName = ClassInfo::shortName($class);
+            $ancestry = ClassInfo::ancestry($class);
+            foreach($lists as $type => $list) {
+                $isConfigOne = $type === 'static';
+                $isDefaultOne = $type === 'default';
+                $isCachingOne = $type === 'caching';
+                if (count($list)) {
+                    foreach($list as $static) {
+                        $key = str_replace('/', '-', $fileName.'-'.$static);
+                        $resultArray[$key] = [
+                            'Vendor' => $vendor,
+                            'Package' => $package,
+                            'ClassName' => $class,
+                            'ShortClassName' => $shortClassName,
+                            'FileLocation' => $fileName,
+                            'ParentClasses' => $ancestry,
+                            'Property' => $static,
+                            'IsConfigOne' => $isConfigOne,
+                            'IsDefaultOne' => $isDefaultOne,
+                            'IsCachingOne' => $isCachingOne,
+                            'IsSet' => true,
+                            'IsInherited' => false,
+                        ];
+                    }
+                }
             }
         }
 

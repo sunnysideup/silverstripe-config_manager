@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-
+  <% base_tag %>
   <title>$Title</title>
 
 </head>
@@ -13,7 +13,7 @@
 
     <% include TableFilterSortHeader %>
 
-    <table>
+    <table class="tfs-table">
         <thead>
             <tr>
                 <th class="col-1">
@@ -51,32 +51,33 @@
                     <span data-filter="ClassName" class="more">{{= it.ClassName}}</span>
                 </td>
                 <td class="col-2">
-                    <span data-filter="ClassName" class="more">{{= it.Vendor}}</span>
+                    <span data-filter="Vendor" class="more">{{= it.Vendor}}</span>
                 </td>
                 <td class="col-3">
-                    <span data-filter="ClassName" class="more">{{= it.Package}}</span>
+                    <span data-filter="Package" class="more">{{= it.Package}}</span>
                 </td>
                 <td class="col-4">
-                    <span data-filter="ClassName" class="more">{{= it.ShortClassName}}</span>
+                    <span data-filter="ShortClassName" class="more">{{= it.ShortClassName}}</span>
                 </td>
                 <td class="col-5">
-                    <span data-filter="ClassName" class="more">{{= it.Variable}}</span>
+                    <span data-filter="Variable" class="more">{{= it.Property}}</span>
                 </td>
                 <td class="col-6">
-                    <span data-filter="ClassName" class="more">{{= it.IsSet}}</span>
+                    <span data-filter="IsSet" class="more">{{= it.IsSet}}</span>
                 </td>
                 <td class="col-7">
-                    <span data-filter="ClassName" class="more">{{= it.IsInherited}}</span>
+                    <span data-filter="IsInherited" class="more">{{= it.IsInherited}}</span>
                 </td>
                 <td class="col-8">
                     <div class="hidden">
-                    {{= it.Value
+                    {{= it.Value}}
                     </div>
                 </td>
                 <td class="col-9">
                     <a href="#" class="more">more</a>
                 </td>
             </tr>
+        </tbody>
     </table>
 
     <% include TableFilterSortFooter %>

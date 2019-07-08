@@ -7,6 +7,8 @@ use SilverStripe\ORM\DB;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\Control\Controller;
 use SilverStripe\View\ArrayData;
+use SilverStripe\View\Requirements;
+use SilverStripe\Core\Config\Config;
 use Sunnysideup\ConfigManager\Api\ConfigList;
 
 use Sunnysideup\TableFilterSort\Api\TableFilterSortAPI;
@@ -34,8 +36,36 @@ class CheckConfigsController extends Controller
 
     public function index($request)
     {
-        TableFilterSortAPI::include_requirements();
+        if(class_exists(\Sunnysideup\WebpackRequirementsBackend\View\RequirementsBackendForWebpack::class, true)) {
+            Config::modify()->set(
+                \Sunnysideup\WebpackRequirementsBackend\View\RequirementsBackendForWebpack::class,
+                'enabled',
+                false
+            );
+        }
+        TableFilterSortAPI::include_requirements(
+            $tableSelector = '.tfs-holder',
+            $blockArray = [],
+            $jqueryLocation = 'https://code.jquery.com/jquery-3.4.1.min.js',
+            $includeInPage = true,
+            $jsSettings = [
+                'rowRawData' => $this->Data(),
+                'scrollToTopAtPageOpening' => true,
+                'sizeOfFixedHeader' => 0,
+                'maximumNumberOfFilterOptions' => 20,
+                'filtersParentPageID' => '',
+                'favouritesParentPageID' => '',
+                'visibleRowCount' => 100,
+                'startWithOpenFilter' => true,
+                'dataDictionary' => [
+                    // 'Supports' => [
+                    //     'Label' => 'Framework Support'
+                    // ]
+                ]
 
+            ]
+
+        );
         return $this->renderWith('Includes/CheckConfigsTable');
     }
 
@@ -44,18 +74,22 @@ class CheckConfigsController extends Controller
         $list = new ConfigList();
         $list = $list->getListOfConfigs();
         ksort($list);
-        $finalArray = ArrayList::create();
+        $finalArray = [];
+        $count = 0;
         foreach ($list as $values) {
-            foreach ($values['Statics'] as $name) {
-                $innerArray = [
-                    'Property' => $name,
-                ];
-                $tmpValues = $values;
-                foreach($tmpValues as $key => $value) {
-                    $innerArray[$key] = $value;
-                }
+            if($values['IsConfigOne']) {
+                $count++;
+                $id = 'row'.$count;
+                $finalArray[$id] = [];
+                $finalArray[$id]['ClassName'] = $values['ClassName'];
+                $finalArray[$id]['Vendor'] = $values['Vendor'];
+                $finalArray[$id]['Package'] = $values['Package'];
+                $finalArray[$id]['ShortClassName'] = $values['ShortClassName'];
+                $finalArray[$id]['Property'] = $values['Property'];
+                $finalArray[$id]['IsSet'] = $values['IsSet'];
+                $finalArray[$id]['IsInherited'] = $values['IsInherited'];
+                $finalArray[$id]['Value'] = 'tba';
             }
-            $finalArray[] = $innerArray;
         }
 
         return $finalArray;
