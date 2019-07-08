@@ -21,7 +21,9 @@
         }
     ],
     "require": {
-        "silverstripe/recipe-cms": "^4.4",
+        "silverstripe/recipe-core": "^4.4",
+    },
+    "require-dev": {
         "sunnysideup/table_filter_sort": "*"
     },
     "extra": [],
