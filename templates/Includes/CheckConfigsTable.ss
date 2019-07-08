@@ -86,7 +86,10 @@
 
     </main>
     <p>
-        This config manager is provided by Sunny Side Up. Please visit <a href="http://ssmods.com/#~(cfi~(Team~(~(vtm~'sunnysideup~ivl~'sunnysideup)))~csr~(sdi~'desc~sct~'Created_U))">ssmods.com</a> for more modules</p>.
+        This config manager is provided by Sunny Side Up. Please visit <a href="http://ssmods.com/#~(cfi~(Team~(~(vtm~'sunnysideup~ivl~'sunnysideup)))~csr~(sdi~'desc~sct~'Created_U))">ssmods.com</a> for more modules.</p>
+    </p>
+    <p>
+        Feedback welcome.
     </p>
 </body>
 </html>

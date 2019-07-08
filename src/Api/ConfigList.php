@@ -16,60 +16,34 @@ class ConfigList
     use Injectable;
     use Configurable;
 
-    protected $locationIncludes = [];
-
-    protected $classNameIncludes = [];
 
     private static $do_not_show = [
         'extra_methods',
-        'built_in_methods',
-        // 'db',
-        // 'has_one',
-        // 'has_many',
-        // 'many_many',
-        // 'belongs_many_many',
-        // 'many_many_extraFields',
-        // 'belongs',
-        // 'field_labels',
-        // 'searchable_fields',
-        // 'defaults',
-        // 'casting',
-        // 'indexes',
-        // 'summary_fields',
-        // 'singular_name',
-        // 'plural_name',
-        // 'allowed_actions',
-        // 'api_access',
-        // 'validation_enabled',
-        // 'cache_has_own_table',
-        // 'fixed_fields',
-        // 'classname_spec_cache',
-        // 'subclass_access',
-        // 'create_table_options',
-        // 'default_records',
-        // 'belongs_to',
-        // 'many_many_extraFields',
-        // 'default_sort',
+        'built_in_methods'
     ];
 
-    public function setLocationIncludes($a)
-    {
-        $this->locationIncludes = $a;
-
-        return $this;
-    }
-
-    public function setClassNameIncludes($a)
-    {
-        $this->classNameIncludes = $a;
-
-        return $this;
-    }
+    // protected $locationIncludes = [];
+    //
+    // protected $classNameIncludes = [];
+    //
+    // public function setLocationIncludes($a)
+    // {
+    //     $this->locationIncludes = $a;
+    //
+    //     return $this;
+    // }
+    //
+    // public function setClassNameIncludes($a)
+    // {
+    //     $this->classNameIncludes = $a;
+    //
+    //     return $this;
+    // }
 
     /**
      * @return array
      */
-    public function getListOfConfigs()
+    public function getListOfConfigs(): array
     {
         $resultArray = [];
 
@@ -77,85 +51,71 @@ class ConfigList
 
         $config = Config::inst();
         $alsoSet = $config->getAll();
+        $base = Director::baseFolder();
 
         $classes = $this->configurableClasses();
         foreach ($classes as $class) {
             $reflector = new ReflectionClass($class);
             $fileName = $reflector->getFileName();
-            $fileName = str_replace(Director::baseFolder(), '', $fileName);
+            $fileName = str_replace($base, '', $fileName);
             $statics = $reflector->getStaticProperties();
 
             //lists
-            $deltaList = $this->getDeltas($config, $class);
-            $staticList = [];
-            $dynamicList = array_keys($alsoSet[strtolower($class)]);
-            $staticListDefaultOnes = [];
-            $staticListCachingStatics = [];
-            foreach (array_keys($statics) as $key) {
-                if (in_array($key, $doNotShow, true)) {
-                    $staticListDefaultOnes[$key] = $key;
-                } elseif (substr($key, 0, 1) === '_' ||
-                    strpos($key, 'cache') !== false
-                ) {
-                    $staticListCachingStatics[$key] = $key;
-                } else {
-                    $staticList[$key] = $key;
+            $staticListSystem = [];
+            $staticListProperty = [];
+            $staticListCaching = [];
+            $staticListDelta = $this->getDeltas($config, $class);
+            $staticListDynamic = array_keys($alsoSet[strtolower($class)]);
+            unset($originalValues);
+            $originalValues = [];
+            foreach ($statics as $property => $details) {
+                $propertyObject = $reflector->getProperty($property);
+                if($propertyObject->isPrivate()) {
+                    $propertyObject->setAccessible(true);
+                    $originalValues[$property] = $propertyObject->getValue($reflector);
+
+                    if (in_array($property, $doNotShow, true)) {
+                        $staticListSystem[$property] = $property;
+                    } elseif (substr($property, 0, 1) === '_' ||
+                        strpos($property, 'cache') !== false
+                    ) {
+                        $staticListCaching[$property] = $property;
+                    } else {
+                        $staticListProperty[$property] = $property;
+                    }
                 }
             }
-            $vendor = 'n/a';
-            $package = 'n/a';
-            $shorterClassname = $class;
-            $classNameArray = explode('\\', $class);
-            if (count($classNameArray) > 1) {
-                $vendor = $classNameArray[0];
-                $package = $classNameArray[1];
-                array_shift($classNameArray);
-                array_shift($classNameArray);
-                $shorterClassname = implode(' / ', $classNameArray);
-            }
             $lists = [
-                'runtime' => $deltaList,
-                'property' => $staticList,
-                'caching' => $staticListCachingStatics,
-                'system' => $staticListDefaultOnes,
-                'dynamic' => $dynamicList,
+                'runtime' => $staticListDelta,
+                'caching' => $staticListCaching,
+                'system' => $staticListSystem,
+                'property' => $staticListProperty,
+                'dynamic' => $staticListDynamic,
             ];
-            $shortClassName = ClassInfo::shortName($class);
-            $ancestry = ClassInfo::ancestry($class);
+
             foreach ($lists as $type => $list) {
-                if (count($list)) {
-                    foreach ($list as $property) {
-                        $key = str_replace('/', '-', $fileName . '-' . $property);
-                        if (! isset($resultArray[$key])) {
-                            $value = $config->get($class, $property, Config::UNINHERITED);
-                            $hasValue = $value ? true : false;
-                            $originalValue = '';
-                            if (is_object($value)) {
-                                $value = 'object';
-                            } else {
-                                if ($reflector->hasProperty($property)) {
-                                    $propertyObject = $reflector->getProperty($property);
-                                    $propertyObject->setAccessible(true);
-                                    $originalValue = $propertyObject->getValue($reflector);
-                                }
+                foreach ($list as $property) {
+                    $key = str_replace('/', '-', $fileName . '-' . $property);
+                    if (! isset($resultArray[$key])) {
+                        $value = $config->get($class, $property, Config::UNINHERITED);
+                        $hasValue = $value ? true : false;
+                        $originalValue = isset($originalValues[$property]) ? $originalValues[$property] : '';
+                        if (is_object($value)) {
+                            $value = 'object';
+                        }
+                        $isDefault = true;
+                        $default = '';
+                        if ($originalValue && $originalValue !== $value) {
+                            $isDefault = false;
+                            if ($value && $originalValue) {
+                                $default = $originalValue;
                             }
-                            $isDefault = true;
-                            $default = '';
-                            if ($originalValue && $originalValue !== $value) {
-                                $isDefault = false;
-                                if ($value && $originalValue) {
-                                    $default = $originalValue;
-                                }
-                            }
-                            $hasDefault = $originalValue ? true : false;
-                            $resultArray[$key] = [
-                                'Vendor' => $vendor,
-                                'Package' => $package,
-                                'ClassName' => $class,
-                                'ShorterClassName' => $shorterClassname,
-                                'ShortClassName' => $shortClassName,
+                        }
+                        $hasDefault = $originalValue ? true : false;
+                        $resultArray[$key] = array_merge(
+                            $this->getClassIntel($class),
+                            [
                                 'FileLocation' => $fileName,
-                                'ParentClasses' => $ancestry,
                                 'Property' => $property,
                                 'Type' => $type,
                                 'IsDefault' => $isDefault,
@@ -163,8 +123,8 @@ class ConfigList
                                 'HasValue' => $hasValue,
                                 'Default' => $default,
                                 'Value' => $value,
-                            ];
-                        }
+                            ]
+                        );
                     }
                 }
             }
@@ -173,7 +133,48 @@ class ConfigList
         return $resultArray;
     }
 
-    public function getDeltas($config, $className)
+    /**
+     * info about class
+     * @param  string $class
+     *
+     * @return array
+     */
+    protected function getClassIntel($class): array
+    {
+        $vendor = 'n/a';
+        $package = 'n/a';
+        $shorterClassname = $class;
+        $classNameArray = explode('\\', $class);
+        $shortClassName = ClassInfo::shortName($class);
+        $ancestry = ClassInfo::ancestry($class);
+        $childClasses = ClassInfo::subclassesFor($class, false);
+        if (count($classNameArray) > 1) {
+            $vendor = $classNameArray[0];
+            $package = $classNameArray[1];
+            array_shift($classNameArray);
+            array_shift($classNameArray);
+            $shorterClassname = implode(' / ', $classNameArray);
+        }
+
+        return [
+            'Vendor' => $vendor,
+            'Package' => $package,
+            'ClassName' => $class,
+            'ShorterClassName' => $shorterClassname,
+            'ShortClassName' => $shortClassName,
+            'ParentClasses' => $ancestry,
+            'ChildClasses' => $childClasses,
+        ];
+    }
+
+    /**
+     * get values set at run time (deltas / changed ones)
+     *
+     * @param  Config $config
+     * @param  string $className
+     * @return array
+     */
+    protected function getDeltas($config, $className): array
     {
         $deltaList = [];
         $deltas = $config->getDeltas($className);
@@ -191,9 +192,14 @@ class ConfigList
         return $deltaList;
     }
 
-    protected function configurableClasses()
+    /**
+     *
+     * @return array
+     */
+    protected function configurableClasses(): array
     {
         $definedClasses = ClassInfo::allClasses();
+
         return array_filter(
             $definedClasses,
             function ($className) {
