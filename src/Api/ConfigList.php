@@ -16,10 +16,9 @@ class ConfigList
     use Injectable;
     use Configurable;
 
-
     private static $do_not_show = [
         'extra_methods',
-        'built_in_methods'
+        'built_in_methods',
     ];
 
     // protected $locationIncludes = [];
@@ -58,38 +57,21 @@ class ConfigList
             $reflector = new ReflectionClass($class);
             $fileName = $reflector->getFileName();
             $fileName = str_replace($base, '', $fileName);
-            $statics = $reflector->getStaticProperties();
 
             //lists
-            $staticListSystem = [];
-            $staticListProperty = [];
-            $staticListCaching = [];
             $staticListDelta = $this->getDeltas($config, $class);
             $staticListDynamic = array_keys($alsoSet[strtolower($class)]);
-            unset($originalValues);
-            $originalValues = [];
-            foreach ($statics as $property => $details) {
-                $propertyObject = $reflector->getProperty($property);
-                if($propertyObject->isPrivate()) {
-                    $propertyObject->setAccessible(true);
-                    $originalValues[$property] = $propertyObject->getValue($reflector);
+            $defaultLists = $this->getDefaultLists($reflector, $doNotShow);
+            $originalValues = $defaultLists['OriginalValues'];
 
-                    if (in_array($property, $doNotShow, true)) {
-                        $staticListSystem[$property] = $property;
-                    } elseif (substr($property, 0, 1) === '_' ||
-                        strpos($property, 'cache') !== false
-                    ) {
-                        $staticListCaching[$property] = $property;
-                    } else {
-                        $staticListProperty[$property] = $property;
-                    }
-                }
-            }
             $lists = [
+                //do first so that they will always show up
                 'runtime' => $staticListDelta,
-                'caching' => $staticListCaching,
-                'system' => $staticListSystem,
-                'property' => $staticListProperty,
+                'system' => $defaultLists['Caching'],
+                'caching' => $defaultLists['System'],
+                'property' => $defaultLists['Property'],
+                //needs to be last so that only dynamic ones that are
+                //not set as property are included
                 'dynamic' => $staticListDynamic,
             ];
 
@@ -131,6 +113,46 @@ class ConfigList
         }
 
         return $resultArray;
+    }
+
+    /**
+     * info about class
+     * @param  string $reflector
+     *
+     * @return array
+     */
+    protected function getDefaultLists($reflector, $doNotShow): array
+    {
+        //vars
+        $staticListSystem = [];
+        $staticListCaching = [];
+        $staticListProperty = [];
+        $originalValues = [];
+        //start loop
+        $statics = $reflector->getStaticProperties();
+        foreach (array_keys($statics) as $property) {
+            $propertyObject = $reflector->getProperty($property);
+            if ($propertyObject->isPrivate()) {
+                $propertyObject->setAccessible(true);
+                $originalValues[$property] = $propertyObject->getValue($reflector);
+
+                if (in_array($property, $doNotShow, true)) {
+                    $staticListSystem[$property] = $property;
+                } elseif (substr($property, 0, 1) === '_' ||
+                    strpos($property, 'cache') !== false
+                ) {
+                    $staticListCaching[$property] = $property;
+                } else {
+                    $staticListProperty[$property] = $property;
+                }
+            }
+        }
+        return [
+            'System' => $staticListSystem,
+            'Caching' => $staticListCaching,
+            'Property' => $staticListProperty,
+            'OriginalValues' => $originalValues,
+        ];
     }
 
     /**
@@ -193,7 +215,6 @@ class ConfigList
     }
 
     /**
-     *
      * @return array
      */
     protected function configurableClasses(): array
