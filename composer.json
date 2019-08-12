@@ -21,9 +21,7 @@
         }
     ],
     "require": {
-        "silverstripe/recipe-core": "~4@stable"
-    },
-    "require-dev": {
+        "silverstripe/framework": "~4@stable",
         "sunnysideup/table_filter_sort": "*"
     },
     "extra": [],
