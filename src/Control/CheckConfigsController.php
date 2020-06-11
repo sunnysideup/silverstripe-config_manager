@@ -81,10 +81,6 @@ class CheckConfigsController extends Controller
                         'Label' => 'Has Default',
                         'CanFilter' => false,
                     ],
-                    'HasDefault' => [
-                        'Label' => 'Has Default',
-                        'CanFilter' => false,
-                    ],
                     'HasValue' => [
                         'Label' => 'Has Value',
                         'CanFilter' => true,

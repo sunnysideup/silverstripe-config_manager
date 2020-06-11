@@ -117,7 +117,8 @@ class ConfigList
 
     /**
      * info about class
-     * @param  string $reflector
+     * @param  ReflectionClass $reflector
+     * @param  bool $doNotShow
      *
      * @return array
      */
@@ -161,7 +162,7 @@ class ConfigList
      *
      * @return array
      */
-    protected function getClassIntel($class): array
+    protected function getClassIntel(string $class): array
     {
         $vendor = 'n/a';
         $package = 'n/a';
