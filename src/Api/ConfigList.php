@@ -9,6 +9,7 @@ use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Extensible;
 use SilverStripe\Core\Injector\Injectable;
+use SilverStripe\Config\Collections\DeltaConfigCollection;
 
 class ConfigList
 {
@@ -116,7 +117,7 @@ class ConfigList
     }
 
     /**
-     * info about class
+     * info about static
      * @param  ReflectionClass $reflector
      * @param  bool $doNotShow
      *
@@ -200,14 +201,16 @@ class ConfigList
     protected function getDeltas($config, $className): array
     {
         $deltaList = [];
-        $deltas = $config->getDeltas($className);
-        if (count($deltas)) {
-            foreach ($deltas as $deltaInners) {
-                if (isset($deltaInners['config'])) {
-                    $deltaList = array_merge(
-                        $deltaList,
-                        array_keys($deltaInners['config'])
-                    );
+        if($config instanceof DeltaConfigCollection) {
+            $deltas = $config->getDeltas($className);
+            if (count($deltas)) {
+                foreach ($deltas as $deltaInners) {
+                    if (isset($deltaInners['config'])) {
+                        $deltaList = array_merge(
+                            $deltaList,
+                            array_keys($deltaInners['config'])
+                        );
+                    }
                 }
             }
         }

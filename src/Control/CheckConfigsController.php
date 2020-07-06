@@ -96,7 +96,7 @@ class CheckConfigsController extends Controller
                 ],
             ]
         );
-        return $this->renderWith('Includes/CheckConfigsTable');
+        return $this->renderWith('Sunnysideup/ConfigManager/Control/CheckConfigsTable');
     }
 
     public function Data()
