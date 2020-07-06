@@ -3,19 +3,24 @@
 namespace Sunnysideup\ConfigManager\Api;
 
 use ReflectionClass;
+use SilverStripe\Config\Collections\DeltaConfigCollection;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Extensible;
+use SilverStripe\Core\Extension;
 use SilverStripe\Core\Injector\Injectable;
-use SilverStripe\Config\Collections\DeltaConfigCollection;
 
 class ConfigList
 {
     use Extensible;
     use Injectable;
     use Configurable;
+
+    private static $exceptional_classes = [
+        Extension::class,
+    ];
 
     private static $do_not_show = [
         'extra_methods',
@@ -201,7 +206,7 @@ class ConfigList
     protected function getDeltas($config, $className): array
     {
         $deltaList = [];
-        if($config instanceof DeltaConfigCollection) {
+        if ($config instanceof DeltaConfigCollection) {
             $deltas = $config->getDeltas($className);
             if (count($deltas)) {
                 foreach ($deltas as $deltaInners) {
@@ -219,6 +224,7 @@ class ConfigList
     }
 
     /**
+     * get a list of class with the Configurable Trait.
      * @return array
      */
     protected function configurableClasses(): array
@@ -236,6 +242,9 @@ class ConfigList
                     do {
                         $traits = array_merge(class_uses($class, $autoload), $traits);
                         $class = get_parent_class($class);
+                        if (in_array($class, $this->Config()->get('exceptional_classes'), true)) {
+                            $traits[Configurable::class] = Configurable::class;
+                        }
                     } while ($class);
 
                     // Get traits of all parent traits

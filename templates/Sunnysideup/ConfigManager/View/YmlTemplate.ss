@@ -1,10 +1,14 @@
-<% with $DataForYmlList %>
+<% with $DataForYmlList %>---
+Name: $Name
 ---
-Name: $getYmlName
----
+
+# below are example values you may use
+# for configuration
+
 <% loop $Classes %>
 $ClassName:
-    <% loop $Values %>$PropertyName: $DefaultValue # more information<% end_loop %>
+<% loop $Properties %>  $PropertyName: $DefaultValue.RAW
+<% end_loop %>
 <% end_loop %>
 
 <% end_with %>
