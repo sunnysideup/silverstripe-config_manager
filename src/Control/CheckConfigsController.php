@@ -3,6 +3,7 @@
 namespace Sunnysideup\ConfigManager\Control;
 
 use SilverStripe\Security\Permission;
+use SilverStripe\Security\Security;
 use SilverStripe\Control\Controller;
 use SilverStripe\Core\Config\Config;
 use Sunnysideup\ConfigManager\Api\ConfigList;
