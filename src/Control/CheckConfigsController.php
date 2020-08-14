@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\ConfigManager\Control;
 
+use SilverStripe\Security\Permission;
 use SilverStripe\Control\Controller;
 use SilverStripe\Core\Config\Config;
 use Sunnysideup\ConfigManager\Api\ConfigList;
@@ -31,6 +32,9 @@ class CheckConfigsController extends Controller
 
     public function index($request)
     {
+        if(! Permission::check('Admin')) {
+            return Security::permissionFailure($this);
+        }
         if (class_exists(\Sunnysideup\WebpackRequirementsBackend\View\RequirementsBackendForWebpack::class, true)) {
             Config::modify()->set(
                 \Sunnysideup\WebpackRequirementsBackend\View\RequirementsBackendForWebpack::class,
