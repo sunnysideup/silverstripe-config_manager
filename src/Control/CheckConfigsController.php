@@ -25,6 +25,14 @@ class CheckConfigsController extends Controller
         'index' => 'ADMIN',
     ];
 
+    protected function init()
+    {
+        parent::init();
+        if(! Permission::check('Admin')) {
+            return Security::permissionFailure($this);
+        }
+    }
+
     public function Title()
     {
         return $this->title;
@@ -32,9 +40,6 @@ class CheckConfigsController extends Controller
 
     public function index($request)
     {
-        if(! Permission::check('Admin')) {
-            return Security::permissionFailure($this);
-        }
         if (class_exists(\Sunnysideup\WebpackRequirementsBackend\View\RequirementsBackendForWebpack::class, true)) {
             Config::modify()->set(
                 \Sunnysideup\WebpackRequirementsBackend\View\RequirementsBackendForWebpack::class,
