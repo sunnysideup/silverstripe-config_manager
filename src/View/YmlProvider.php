@@ -25,6 +25,16 @@ class YmlProvider extends ViewableData
 
     protected $dataAsObject = null;
 
+    private static $model_fields = [
+        'db',
+        'has_one',
+        'belongs_to',
+        'has_many',
+        'many_many',
+        'many_many_extraFields',
+        'belongs_many_many',
+    ];
+
     private static $excluded_properties = [
         'db',
         'casting',
@@ -69,6 +79,17 @@ class YmlProvider extends ViewableData
         return $this->formatAsYml();
     }
 
+    public function getModel()
+    {
+        $this->data = (new ConfigList())->getListOfConfigs();
+        foreach ($this->data as $key => $item) {
+            if($this->isModelField($item)) {
+                $this->filteredData[$key] = $item;
+            }
+        }
+        return $this->formatAsYml();
+    }
+
     public function getDataForYmlList(): ArrayData
     {
         $nestedArray = $this->convertFlatArrayIntoNestedArray($this->filteredData);
@@ -95,7 +116,7 @@ class YmlProvider extends ViewableData
         // );
     }
 
-    public function getYmlName()
+    public function getYmlName() : string
     {
         if ($this->locationFilter) {
             $name = strtolower(str_replace('/', '_', $this->locationFilter));
@@ -179,5 +200,10 @@ class YmlProvider extends ViewableData
     protected function itemShouldBeIncluded(array $item): bool
     {
         return ! in_array($item['Property'], $this->Config()->get('excluded_properties'), true);
+    }
+
+    protected function isModelField(array $item): bool
+    {
+        return in_array($item['Property'], $this->Config()->get('model_fields'), true);
     }
 }

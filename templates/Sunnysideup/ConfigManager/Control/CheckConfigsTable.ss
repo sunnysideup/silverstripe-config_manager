@@ -9,6 +9,14 @@
 </head>
 
 <body>
+    <h2>
+        Also see:
+    </h2>
+    <ul>
+        <li><a href="$Link(location)">Location</a></li>
+        <li><a href="$Link(package/vendor/packagename)">Package</a></li>
+        <li><a href="$Link(model)">Model</a></li>
+    </ul>
     <main class="tfs-holder loading">
 
     <% include TableFilterSortHeader %>

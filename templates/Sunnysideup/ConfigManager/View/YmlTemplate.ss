@@ -1,3 +1,6 @@
+<pre>
+
+
 <% with $DataForYmlList %>---
 Name: $Name
 ---
@@ -12,3 +15,6 @@ $ClassName:
 <% end_loop %>
 
 <% end_with %>
+
+
+</pre>

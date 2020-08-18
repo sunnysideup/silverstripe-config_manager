@@ -7,6 +7,7 @@ use SilverStripe\Security\Security;
 use SilverStripe\Control\Controller;
 use SilverStripe\Core\Config\Config;
 use Sunnysideup\ConfigManager\Api\ConfigList;
+use Sunnysideup\ConfigManager\View\YmlProvider;
 
 use Sunnysideup\TableFilterSort\Api\TableFilterSortAPI;
 
@@ -16,7 +17,7 @@ class CheckConfigsController extends Controller
 
     protected $description = 'Runs through all classes and looks for private statics';
 
-    protected $url_segment = 'checkconfigs';
+    private static $url_segment = 'admin-dev/checkconfigs';
 
     /**
      * Defines methods that can be called directly
@@ -24,6 +25,9 @@ class CheckConfigsController extends Controller
      */
     private static $allowed_actions = [
         'index' => 'ADMIN',
+        'location' => 'ADMIN',
+        'package' => 'ADMIN',
+        'model' => 'ADMIN',
     ];
 
     protected function init()
@@ -37,6 +41,22 @@ class CheckConfigsController extends Controller
     public function Title()
     {
         return $this->title;
+    }
+
+    public function location()
+    {
+        return (new YmlProvider)->getYmlForLocation($this->param('ID'));
+    }
+
+    public function model()
+    {
+        return (new YmlProvider)
+            ->getModel();
+    }
+
+    public function package()
+    {
+        return (new YmlProvider)->getYmlForPackage($this->param('ID'), $this->param('OtherID'));
     }
 
     public function index($request)
