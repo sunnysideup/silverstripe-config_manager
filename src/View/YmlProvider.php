@@ -83,7 +83,7 @@ class YmlProvider extends ViewableData
     {
         $this->data = (new ConfigList())->getListOfConfigs();
         foreach ($this->data as $key => $item) {
-            if($this->isModelField($item)) {
+            if ($this->isModelField($item)) {
                 $this->filteredData[$key] = $item;
             }
         }
@@ -116,7 +116,7 @@ class YmlProvider extends ViewableData
         // );
     }
 
-    public function getYmlName() : string
+    public function getYmlName(): string
     {
         if ($this->locationFilter) {
             $name = strtolower(str_replace('/', '_', $this->locationFilter));

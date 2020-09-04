@@ -2,10 +2,10 @@
 
 namespace Sunnysideup\ConfigManager\Control;
 
-use SilverStripe\Security\Permission;
-use SilverStripe\Security\Security;
 use SilverStripe\Control\Controller;
 use SilverStripe\Core\Config\Config;
+use SilverStripe\Security\Permission;
+use SilverStripe\Security\Security;
 use Sunnysideup\ConfigManager\Api\ConfigList;
 use Sunnysideup\ConfigManager\View\YmlProvider;
 
@@ -30,14 +30,6 @@ class CheckConfigsController extends Controller
         'model' => 'ADMIN',
     ];
 
-    protected function init()
-    {
-        parent::init();
-        if(! Permission::check('Admin')) {
-            return Security::permissionFailure($this);
-        }
-    }
-
     public function Title()
     {
         return $this->title;
@@ -45,18 +37,18 @@ class CheckConfigsController extends Controller
 
     public function location()
     {
-        return (new YmlProvider)->getYmlForLocation($this->param('ID'));
+        return (new YmlProvider())->getYmlForLocation($this->param('ID'));
     }
 
     public function model()
     {
-        return (new YmlProvider)
+        return (new YmlProvider())
             ->getModel();
     }
 
     public function package()
     {
-        return (new YmlProvider)->getYmlForPackage($this->param('ID'), $this->param('OtherID'));
+        return (new YmlProvider())->getYmlForPackage($this->param('ID'), $this->param('OtherID'));
     }
 
     public function index($request)
@@ -153,5 +145,13 @@ class CheckConfigsController extends Controller
         }
 
         return $finalArray;
+    }
+
+    protected function init()
+    {
+        parent::init();
+        if (! Permission::check('Admin')) {
+            return Security::permissionFailure($this);
+        }
     }
 }
