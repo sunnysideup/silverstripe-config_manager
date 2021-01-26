@@ -2,12 +2,12 @@
 
 namespace Sunnysideup\ConfigManager\View;
 
-use SilverStripe\ORM\ArrayList;
-
-use SilverStripe\View\ArrayData;
 use SilverStripe\Core\Config\Configurable;
+
 use SilverStripe\Core\Extensible;
 use SilverStripe\Core\Injector\Injectable;
+use SilverStripe\ORM\ArrayList;
+use SilverStripe\View\ArrayData;
 use Sunnysideup\ConfigManager\Api\ConfigList;
 
 
