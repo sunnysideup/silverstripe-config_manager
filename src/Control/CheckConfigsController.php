@@ -63,8 +63,8 @@ class CheckConfigsController extends Controller
         TableFilterSortAPI::include_requirements(
             $tableSelector = '.tfs-holder',
             $blockArray = [],
-            $jqueryLocation = 'https://code.jquery.com/jquery-3.4.1.min.js',
-            $includeInPage = true,
+            $jqueryLocation = 'https://code.jquery.com/jquery-3.5.1.min.js',
+            $includeInPage = false,
             $jsSettings = [
                 'rowRawData' => $this->Data(),
                 'scrollToTopAtPageOpening' => true,

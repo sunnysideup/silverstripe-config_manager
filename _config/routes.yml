@@ -1,6 +1,8 @@
 ---
 Name: sunnysideup-config-checks
+Before:
+    - '*'
 ---
 SilverStripe\Control\Director:
   rules:
-    admin-dev/checkconfigs//$Action/$ID/$OtherID: Sunnysideup\ConfigManager\Control\CheckConfigsController
+    admin/checkconfigsforsite//$Action/$ID/$OtherID: Sunnysideup\ConfigManager\Control\CheckConfigsController
