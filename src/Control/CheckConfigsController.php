@@ -17,7 +17,7 @@ class CheckConfigsController extends Controller
 
     protected $description = 'Runs through all classes and looks for private statics';
 
-    private static $url_segment = 'admin-dev/checkconfigs';
+    private static $url_segment = 'admin/checkconfigs';
 
     /**
      * Defines methods that can be called directly
