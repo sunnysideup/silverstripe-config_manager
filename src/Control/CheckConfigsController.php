@@ -17,7 +17,7 @@ class CheckConfigsController extends Controller
 
     protected $description = 'Runs through all classes and looks for private statics';
 
-    private static $url_segment = 'admin/checkconfigs';
+    private static $url_segment = 'dev/checkconfigs';
 
     /**
      * Defines methods that can be called directly
@@ -37,7 +37,11 @@ class CheckConfigsController extends Controller
 
     public function location()
     {
-        return (new YmlProvider())->getYmlForLocation($this->param('ID'));
+        $location = $this->request->param('ID');
+        if (! $location) {
+            die('please set a location in the url /dev/checkconfigs/location/framework/ - e.g. framework');
+        }
+        return (new YmlProvider())->getYmlForLocation($location);
     }
 
     public function model()
@@ -48,7 +52,7 @@ class CheckConfigsController extends Controller
 
     public function package()
     {
-        return (new YmlProvider())->getYmlForPackage($this->param('ID'), $this->param('OtherID'));
+        return (new YmlProvider())->getYmlForPackage($this->request->param('ID'), $this->request->param('OtherID'));
     }
 
     public function index($request)

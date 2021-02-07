@@ -5,4 +5,4 @@ Before:
 ---
 SilverStripe\Control\Director:
   rules:
-    admin/checkconfigsforsite//$Action/$ID/$OtherID: Sunnysideup\ConfigManager\Control\CheckConfigsController
+    dev/checkconfigs//$Action/$ID/$OtherID: Sunnysideup\ConfigManager\Control\CheckConfigsController
