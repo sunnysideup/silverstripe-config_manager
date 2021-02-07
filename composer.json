@@ -22,7 +22,7 @@
     ],
     "require": {
         "silverstripe/framework": "~4@stable",
-        "sunnysideup/table_filter_sort": "^5.1"
+        "sunnysideup/table_filter_sort": "dev-master"
     },
     "extra": [],
     "autoload": {
