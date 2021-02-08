@@ -2,10 +2,6 @@
 
 namespace Sunnysideup\ConfigManager\View;
 
-use SilverStripe\Core\Config\Configurable;
-
-use SilverStripe\Core\Extensible;
-use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\ViewableData;
@@ -16,7 +12,6 @@ use Symfony\Component\Yaml\Yaml;
 
 class YmlProvider extends ViewableData
 {
-
     protected $vendorName = '';
 
     protected $packageName = '';
