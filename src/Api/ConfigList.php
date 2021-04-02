@@ -45,9 +45,6 @@ class ConfigList
     //     return $this;
     // }
 
-    /**
-     * @return array
-     */
     public function getListOfConfigs(): array
     {
         $resultArray = [];
@@ -86,7 +83,7 @@ class ConfigList
                     $key = str_replace('/', '-', $fileName . '-' . $property);
                     if (! isset($resultArray[$key])) {
                         $value = $config->get($class, $property, Config::UNINHERITED);
-                        $hasValue = $value ? true : false;
+                        $hasValue = (bool) $value;
                         $originalValue = isset($originalValues[$property]) ? $originalValues[$property] : '';
                         if (is_object($value)) {
                             $value = 'object';
@@ -99,7 +96,7 @@ class ConfigList
                                 $default = $originalValue;
                             }
                         }
-                        $hasDefault = $originalValue ? true : false;
+                        $hasDefault = (bool) $originalValue;
                         $resultArray[$key] = array_merge(
                             $this->getClassIntel($class),
                             [
@@ -125,8 +122,6 @@ class ConfigList
      * info about static
      * @param  ReflectionClass $reflector
      * @param  bool $doNotShow
-     *
-     * @return array
      */
     protected function getDefaultLists($reflector, $doNotShow): array
     {
@@ -164,9 +159,6 @@ class ConfigList
 
     /**
      * info about class
-     * @param  string $class
-     *
-     * @return array
      */
     protected function getClassIntel(string $class): array
     {
@@ -201,7 +193,6 @@ class ConfigList
      *
      * @param  Config $config
      * @param  string $className
-     * @return array
      */
     protected function getDeltas($config, $className): array
     {
@@ -225,7 +216,6 @@ class ConfigList
 
     /**
      * get a list of class with the Configurable Trait.
-     * @return array
      */
     protected function configurableClasses(): array
     {

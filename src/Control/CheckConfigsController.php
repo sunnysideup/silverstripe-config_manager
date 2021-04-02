@@ -133,7 +133,7 @@ class CheckConfigsController extends Controller
         $finalArray = [];
         $count = 0;
         foreach ($list as $values) {
-            $count++;
+            ++$count;
             $id = 'row' . $count;
             $finalArray[$id] = [];
             $finalArray[$id]['Vendor'] = $values['Vendor'];

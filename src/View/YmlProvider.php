@@ -22,7 +22,7 @@ class YmlProvider extends ViewableData
 
     protected $filteredData = [];
 
-    protected $dataAsObject = null;
+    protected $dataAsObject;
 
     private static $model_fields = [
         'db',
