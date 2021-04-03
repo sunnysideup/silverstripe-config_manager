@@ -119,9 +119,10 @@ class ConfigList
     }
 
     /**
-     * info about static
-     * @param  ReflectionClass $reflector
-     * @param  bool $doNotShow
+     * info about static.
+     *
+     * @param ReflectionClass $reflector
+     * @param bool            $doNotShow
      */
     protected function getDefaultLists($reflector, $doNotShow): array
     {
@@ -140,8 +141,8 @@ class ConfigList
 
                 if (in_array($property, $doNotShow, true)) {
                     $staticListSystem[$property] = $property;
-                } elseif (substr($property, 0, 1) === '_' ||
-                    strpos($property, 'cache') !== false
+                } elseif ('_' === substr($property, 0, 1) ||
+                    false !== strpos($property, 'cache')
                 ) {
                     $staticListCaching[$property] = $property;
                 } else {
@@ -149,6 +150,7 @@ class ConfigList
                 }
             }
         }
+
         return [
             'System' => $staticListSystem,
             'Caching' => $staticListCaching,
@@ -158,7 +160,7 @@ class ConfigList
     }
 
     /**
-     * info about class
+     * info about class.
      */
     protected function getClassIntel(string $class): array
     {
@@ -189,10 +191,10 @@ class ConfigList
     }
 
     /**
-     * get values set at run time (deltas / changed ones)
+     * get values set at run time (deltas / changed ones).
      *
-     * @param  Config $config
-     * @param  string $className
+     * @param Config $config
+     * @param string $className
      */
     protected function getDeltas($config, $className): array
     {
@@ -248,6 +250,7 @@ class ConfigList
                     foreach (array_keys($traits) as $trait) {
                         $traits = array_merge(class_uses($trait, $autoload), $traits);
                     }
+
                     return isset($traits[Configurable::class]);
                 }
             }

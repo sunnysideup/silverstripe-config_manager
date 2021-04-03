@@ -2,6 +2,10 @@
 
 use SilverStripe\Dev\SapphireTest;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class ConfigManagerTest extends SapphireTest
 {
     protected $usesDatabase = false;

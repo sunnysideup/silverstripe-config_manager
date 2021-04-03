@@ -6,8 +6,6 @@ use SilverStripe\ORM\ArrayList;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\ViewableData;
 use Sunnysideup\ConfigManager\Api\ConfigList;
-
-
 use Symfony\Component\Yaml\Yaml;
 
 class YmlProvider extends ViewableData
@@ -51,12 +49,13 @@ class YmlProvider extends ViewableData
         $this->locationFilter = $locationFilter;
         $this->data = (new ConfigList())->getListOfConfigs();
         foreach ($this->data as $key => $item) {
-            if (stripos($item['FileLocation'], $locationFilter) !== false) {
+            if (false !== stripos($item['FileLocation'], $locationFilter)) {
                 if ($this->itemShouldBeIncluded($item)) {
                     $this->filteredData[$key] = $item;
                 }
             }
         }
+
         return $this->formatAsYml();
     }
 
@@ -75,6 +74,7 @@ class YmlProvider extends ViewableData
                 }
             }
         }
+
         return $this->formatAsYml();
     }
 
@@ -86,14 +86,15 @@ class YmlProvider extends ViewableData
                 $this->filteredData[$key] = $item;
             }
         }
+
         return $this->formatAsYml();
     }
 
     public function getDataForYmlList(): ArrayData
     {
         $nestedArray = $this->convertFlatArrayIntoNestedArray($this->filteredData);
-        return $this->convertNestedArrayIntoObjects($nestedArray);
 
+        return $this->convertNestedArrayIntoObjects($nestedArray);
         // $this->dataAsObject = new ArrayData(
         //     [
         //         'Classes' => new ArrayList()
@@ -122,6 +123,7 @@ class YmlProvider extends ViewableData
         } else {
             $name = strtolower($this->vendorName . '_' . $this->packageName);
         }
+
         return $name . '_config_example';
     }
 
@@ -179,20 +181,24 @@ class YmlProvider extends ViewableData
     {
         if (is_array($mixed)) {
             $val = "\n" . Yaml::dump($mixed);
+
             return str_replace("\n", "\n    ", $val);
         }
         if (is_bool($mixed)) {
             if ($mixed) {
                 return 'true';
             }
+
             return 'false';
         }
         if (is_numeric($mixed)) {
             if ($mixed) {
                 return $mixed;
             }
+
             return 0;
         }
+
         return Yaml::dump($mixed);
     }
 

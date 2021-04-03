@@ -8,7 +8,6 @@ use SilverStripe\Security\Permission;
 use SilverStripe\Security\Security;
 use Sunnysideup\ConfigManager\Api\ConfigList;
 use Sunnysideup\ConfigManager\View\YmlProvider;
-
 use Sunnysideup\TableFilterSort\Api\TableFilterSortAPI;
 
 class CheckConfigsController extends Controller
@@ -20,7 +19,8 @@ class CheckConfigsController extends Controller
     private static $url_segment = 'dev/checkconfigs';
 
     /**
-     * Defines methods that can be called directly
+     * Defines methods that can be called directly.
+     *
      * @var array
      */
     private static $allowed_actions = [
@@ -41,13 +41,15 @@ class CheckConfigsController extends Controller
         if (! $location) {
             die('please set a location in the url /dev/checkconfigs/location/framework/ - e.g. framework');
         }
+
         return (new YmlProvider())->getYmlForLocation($location);
     }
 
     public function model()
     {
         return (new YmlProvider())
-            ->getModel();
+            ->getModel()
+        ;
     }
 
     public function package()
@@ -122,6 +124,7 @@ class CheckConfigsController extends Controller
                 ],
             ]
         );
+
         return $this->renderWith('Sunnysideup/ConfigManager/Control/CheckConfigsTable');
     }
 
