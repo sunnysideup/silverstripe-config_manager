@@ -90,7 +90,7 @@ class ConfigList
                         }
                         $isDefault = true;
                         $default = '';
-                        if ($originalValue && $originalValue !== $value) {
+                        if ($originalValue !== $value) {
                             $isDefault = false;
                             if ($value && $originalValue) {
                                 $default = $originalValue;
