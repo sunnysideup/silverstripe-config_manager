@@ -58,7 +58,7 @@ class ConfigList
         $classes = $this->configurableClasses();
         foreach ($classes as $class) {
             $reflector = new ReflectionClass($class);
-            $fileName = $reflector->getFileName();
+            $fileName = $reflector->getFilename();
             $fileName = str_replace($base, '', $fileName);
 
             //lists
