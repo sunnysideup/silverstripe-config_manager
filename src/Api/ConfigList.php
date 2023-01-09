@@ -122,9 +122,9 @@ class ConfigList
      * info about static.
      *
      * @param ReflectionClass $reflector
-     * @param bool            $doNotShow
+     * @param array            $doNotShow
      */
-    protected function getDefaultLists($reflector, $doNotShow): array
+    protected function getDefaultLists($reflector, array $doNotShow): array
     {
         //vars
         $staticListSystem = [];
