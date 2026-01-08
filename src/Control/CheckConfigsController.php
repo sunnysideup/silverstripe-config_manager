@@ -160,5 +160,6 @@ class CheckConfigsController extends Controller
         if (! Permission::check('Admin')) {
             return Security::permissionFailure($this);
         }
+        return null;
     }
 }

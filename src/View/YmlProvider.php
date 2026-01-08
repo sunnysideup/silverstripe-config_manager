@@ -49,10 +49,8 @@ class YmlProvider extends ViewableData
         $this->locationFilter = $locationFilter;
         $this->data = (new ConfigList())->getListOfConfigs();
         foreach ($this->data as $key => $item) {
-            if (false !== stripos($item['FileLocation'], $locationFilter)) {
-                if ($this->itemShouldBeIncluded($item)) {
-                    $this->filteredData[$key] = $item;
-                }
+            if (false !== stripos($item['FileLocation'], $locationFilter) && $this->itemShouldBeIncluded($item)) {
+                $this->filteredData[$key] = $item;
             }
         }
 
@@ -65,13 +63,9 @@ class YmlProvider extends ViewableData
         $this->packageName = $packageName;
         $this->data = (new ConfigList())->getListOfConfigs();
         foreach ($this->data as $key => $item) {
-            if (strtolower($item['Vendor']) === strtolower($this->vendorName)
-                &&
-                strtolower($item['Package']) === strtolower($this->packageName)
+            if (strtolower($item['Vendor']) === strtolower($this->vendorName) && strtolower($item['Package']) === strtolower($this->packageName) && $this->itemShouldBeIncluded($item)
             ) {
-                if ($this->itemShouldBeIncluded($item)) {
-                    $this->filteredData[$key] = $item;
-                }
+                $this->filteredData[$key] = $item;
             }
         }
 

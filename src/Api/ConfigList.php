@@ -122,7 +122,6 @@ class ConfigList
      * info about static.
      *
      * @param ReflectionClass $reflector
-     * @param array            $doNotShow
      */
     protected function getDefaultLists($reflector, array $doNotShow): array
     {
@@ -201,7 +200,7 @@ class ConfigList
         $deltaList = [];
         if ($config instanceof DeltaConfigCollection) {
             $deltas = $config->getDeltas($className);
-            if (count($deltas)) {
+            if (count($deltas) > 0) {
                 foreach ($deltas as $deltaInners) {
                     if (isset($deltaInners['config'])) {
                         $deltaList = array_merge(
@@ -241,7 +240,7 @@ class ConfigList
 
                     // Get traits of all parent traits
                     $traitsToSearch = $traits;
-                    while (! empty($traitsToSearch)) {
+                    while ($traitsToSearch !== []) {
                         $newTraits = class_uses(array_pop($traitsToSearch), $autoload);
                         $traits = array_merge($newTraits, $traits);
                         $traitsToSearch = array_merge($newTraits, $traitsToSearch);
