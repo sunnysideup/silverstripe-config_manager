@@ -10,6 +10,10 @@ use Sunnysideup\ConfigManager\Api\ConfigList;
 use Sunnysideup\ConfigManager\View\YmlProvider;
 use Sunnysideup\TableFilterSort\Api\TableFilterSortAPI;
 
+/**
+ * Class \Sunnysideup\ConfigManager\Control\CheckConfigsController
+ *
+ */
 class CheckConfigsController extends Controller
 {
     protected $title = 'Check configs';
