@@ -1,33 +1,33 @@
 {
-    "name": "sunnysideup/config_manager",
-    "type": "silverstripe-vendormodule",
-    "description": "Silverstripe developers module that helps you get a better grip on the config layer",
-    "keywords": [
-        "Silverstripe-CMS",
-        "CMS",
-        "Silverstripe",
-        "Silverstripe CMS",
-        "statics",
-        "yml",
-        "yaml",
-        "config"
-    ],
-    "license": "BSD-3-Clause",
-    "authors": [
-        {
-            "name": "Nicolaas Francken",
-            "email": "modules@sunnysideup.co.nz",
-            "role": "lead developer"
-        }
-    ],
-    "require": {
-        "silverstripe/framework": "^4.0 || ^5.0",
-        "sunnysideup/table_filter_sort": "dev-master"
-    },
-    "extra": [],
-    "autoload": {
-        "psr-4": {
-            "Sunnysideup\\ConfigManager\\": "src/"
-        }
+  "name": "sunnysideup/config_manager",
+  "type": "silverstripe-vendormodule",
+  "description": "Silverstripe developers module that helps you get a better grip on the config layer",
+  "keywords": [
+    "Silverstripe-CMS",
+    "CMS",
+    "Silverstripe",
+    "Silverstripe CMS",
+    "statics",
+    "yml",
+    "yaml",
+    "config"
+  ],
+  "license": "BSD-3-Clause",
+  "authors": [
+    {
+      "name": "Nicolaas Francken",
+      "email": "modules@sunnysideup.co.nz",
+      "role": "lead developer"
     }
+  ],
+  "require": {
+    "silverstripe/framework": "^4.0 || ^5.0",
+    "sunnysideup/table_filter_sort": "5.x-dev"
+  },
+  "extra": [],
+  "autoload": {
+    "psr-4": {
+      "Sunnysideup\\ConfigManager\\": "src/"
+    }
+  }
 }
