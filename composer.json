@@ -21,19 +21,13 @@
     }
   ],
   "require": {
-    "silverstripe/framework": "^6.0"
+    "silverstripe/framework": "^6.0",
+    "sunnysideup/table_filter_sort": "dev-main"
   },
   "extra": [],
   "autoload": {
     "psr-4": {
       "Sunnysideup\\ConfigManager\\": "src/"
-    }
-  },
-  "yet-to-update": {
-    "sunnysideup/table_filter_sort": {
-      "section": "require",
-      "current": "^5.0-dev",
-      "reason": "no-compatible-stable-release"
     }
   }
 }
