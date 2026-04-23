@@ -2,6 +2,8 @@
 
 namespace Sunnysideup\ConfigManager\Control;
 
+use Override;
+use Sunnysideup\WebpackRequirementsBackend\View\RequirementsBackendForWebpack;
 use SilverStripe\Control\Controller;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Security\Permission;
@@ -46,30 +48,31 @@ class CheckConfigsController extends Controller
             die('please set a location in the url /dev/checkconfigs/location/framework/ - e.g. framework');
         }
 
-        return (new YmlProvider())->getYmlForLocation($location);
+        return (YmlProvider::create())->getYmlForLocation($location);
     }
 
     public function model()
     {
-        return (new YmlProvider())
+        return (YmlProvider::create())
             ->getModel()
         ;
     }
 
     public function package()
     {
-        return (new YmlProvider())->getYmlForPackage($this->request->param('ID'), $this->request->param('OtherID'));
+        return (YmlProvider::create())->getYmlForPackage($this->request->param('ID'), $this->request->param('OtherID'));
     }
 
     public function index($request)
     {
-        if (class_exists(\Sunnysideup\WebpackRequirementsBackend\View\RequirementsBackendForWebpack::class, true)) {
+        if (class_exists(RequirementsBackendForWebpack::class, true)) {
             Config::modify()->set(
-                \Sunnysideup\WebpackRequirementsBackend\View\RequirementsBackendForWebpack::class,
+                RequirementsBackendForWebpack::class,
                 'enabled',
                 false
             );
         }
+
         TableFilterSortAPI::include_requirements(
             $tableSelector = '.tfs-holder',
             $blockArray = [],
@@ -134,7 +137,7 @@ class CheckConfigsController extends Controller
 
     public function Data()
     {
-        $list = new ConfigList();
+        $list = ConfigList::create();
         $list = $list->getListOfConfigs();
         ksort($list);
         $finalArray = [];
@@ -158,12 +161,14 @@ class CheckConfigsController extends Controller
         return $finalArray;
     }
 
+    #[Override]
     protected function init()
     {
         parent::init();
         if (! Permission::check('Admin')) {
             return Security::permissionFailure($this);
         }
+
         return null;
     }
 }
