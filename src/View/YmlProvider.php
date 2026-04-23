@@ -47,9 +47,9 @@ class YmlProvider extends ViewableData
     public function getYmlForLocation(string $locationFilter): string
     {
         $this->locationFilter = $locationFilter;
-        $this->data = (new ConfigList())->getListOfConfigs();
+        $this->data = (ConfigList::create())->getListOfConfigs();
         foreach ($this->data as $key => $item) {
-            if (false !== stripos($item['FileLocation'], $locationFilter) && $this->itemShouldBeIncluded($item)) {
+            if (false !== stripos((string) $item['FileLocation'], $locationFilter) && $this->itemShouldBeIncluded($item)) {
                 $this->filteredData[$key] = $item;
             }
         }
@@ -61,9 +61,9 @@ class YmlProvider extends ViewableData
     {
         $this->vendorName = $vendorName;
         $this->packageName = $packageName;
-        $this->data = (new ConfigList())->getListOfConfigs();
+        $this->data = (ConfigList::create())->getListOfConfigs();
         foreach ($this->data as $key => $item) {
-            if (strtolower($item['Vendor']) === strtolower($this->vendorName) && strtolower($item['Package']) === strtolower($this->packageName) && $this->itemShouldBeIncluded($item)
+            if (strtolower((string) $item['Vendor']) === strtolower($this->vendorName) && strtolower((string) $item['Package']) === strtolower($this->packageName) && $this->itemShouldBeIncluded($item)
             ) {
                 $this->filteredData[$key] = $item;
             }
@@ -74,7 +74,7 @@ class YmlProvider extends ViewableData
 
     public function getModel()
     {
-        $this->data = (new ConfigList())->getListOfConfigs();
+        $this->data = (ConfigList::create())->getListOfConfigs();
         foreach ($this->data as $key => $item) {
             if ($this->isModelField($item)) {
                 $this->filteredData[$key] = $item;
@@ -136,6 +136,7 @@ class YmlProvider extends ViewableData
                 $newArray['Classes'][$item['ClassName']]['ClassName'] = $item['ClassName'];
                 $newArray['Classes'][$item['ClassName']]['Properties'] = [];
             }
+
             if (! isset($newArray['Classes'][$item['ClassName']]['Properties'][$item['Property']])) {
                 $newArray['Classes'][$item['ClassName']]['Properties'][$item['Property']] = [
                     'PropertyName' => $item['Property'],
@@ -149,22 +150,19 @@ class YmlProvider extends ViewableData
 
     protected function convertNestedArrayIntoObjects(array $nestedArray): ArrayData
     {
-        $newObject = new ArrayData(
-            [
-                'Classes' => new ArrayList(),
-                'Name' => $this->getYmlName(),
-            ]
-        );
+        $newObject = ArrayData::create([
+            'Classes' => ArrayList::create(),
+            'Name' => $this->getYmlName(),
+        ]);
         foreach ($nestedArray['Classes'] as $properties) {
-            $itemHolder = new ArrayData(
-                [
-                    'ClassName' => $properties['ClassName'],
-                    'Properties' => new ArrayList(),
-                ]
-            );
+            $itemHolder = ArrayData::create([
+                'ClassName' => $properties['ClassName'],
+                'Properties' => ArrayList::create(),
+            ]);
             foreach ($properties['Properties'] as $propertyData) {
-                $itemHolder->Properties->push(new ArrayData($propertyData));
+                $itemHolder->Properties->push(ArrayData::create($propertyData));
             }
+
             $newObject->Classes->push($itemHolder);
         }
 
@@ -178,6 +176,7 @@ class YmlProvider extends ViewableData
 
             return str_replace("\n", "\n    ", $val);
         }
+
         if (is_bool($mixed)) {
             if ($mixed) {
                 return 'true';
@@ -185,6 +184,7 @@ class YmlProvider extends ViewableData
 
             return 'false';
         }
+
         if (is_numeric($mixed)) {
             if ($mixed) {
                 return $mixed;

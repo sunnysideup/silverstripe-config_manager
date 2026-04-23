@@ -84,10 +84,11 @@ class ConfigList
                     if (! isset($resultArray[$key])) {
                         $value = $config->get($class, $property, Config::UNINHERITED);
                         $hasValue = (bool) $value;
-                        $originalValue = isset($originalValues[$property]) ? $originalValues[$property] : '';
+                        $originalValue = $originalValues[$property] ?? '';
                         if (is_object($value)) {
                             $value = 'object';
                         }
+
                         $isDefault = true;
                         $default = '';
                         if ($originalValue !== $value) {
@@ -96,6 +97,7 @@ class ConfigList
                                 $default = $originalValue;
                             }
                         }
+
                         $hasDefault = (bool) $originalValue;
                         $resultArray[$key] = array_merge(
                             $this->getClassIntel($class),
@@ -135,13 +137,12 @@ class ConfigList
         foreach (array_keys($statics) as $property) {
             $propertyObject = $reflector->getProperty($property);
             if ($propertyObject->isPrivate()) {
-                $propertyObject->setAccessible(true);
                 $originalValues[$property] = $propertyObject->getValue($reflector);
 
                 if (in_array($property, $doNotShow, true)) {
                     $staticListSystem[$property] = $property;
-                } elseif ('_' === substr($property, 0, 1) ||
-                    false !== strpos($property, 'cache')
+                } elseif (str_starts_with($property, '_') ||
+                    str_contains($property, 'cache')
                 ) {
                     $staticListCaching[$property] = $property;
                 } else {
