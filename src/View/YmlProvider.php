@@ -2,13 +2,13 @@
 
 namespace Sunnysideup\ConfigManager\View;
 
-use SilverStripe\ORM\ArrayList;
-use SilverStripe\View\ArrayData;
-use SilverStripe\View\ViewableData;
+use SilverStripe\Model\ModelData;
+use SilverStripe\Model\ArrayData;
+use SilverStripe\Model\List\ArrayList;
 use Sunnysideup\ConfigManager\Api\ConfigList;
 use Symfony\Component\Yaml\Yaml;
 
-class YmlProvider extends ViewableData
+class YmlProvider extends ModelData
 {
     protected $vendorName = '';
 
