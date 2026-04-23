@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\ConfigManager\Control;
 
+use Override;
 use Sunnysideup\WebpackRequirementsBackend\View\RequirementsBackendForWebpack;
 use SilverStripe\Control\Controller;
 use SilverStripe\Core\Config\Config;
@@ -160,6 +161,7 @@ class CheckConfigsController extends Controller
         return $finalArray;
     }
 
+    #[Override]
     protected function init()
     {
         parent::init();
